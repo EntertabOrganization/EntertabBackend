@@ -9,16 +9,16 @@ import { AppError } from '../../middleware/error.middleware';
  */
 export const createContactUs = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { name, email, subject, message } = req.body;
+    const { name, email, phoneNumber, message } = req.body;
 
-    if (!name || !email || !subject || !message) {
-      return next(new AppError('Please provide name, email, subject and message', 400));
+    if (!name || !email || !phoneNumber || !message) {
+      return next(new AppError('Please provide name, email, phoneNumber and message', 400));
     }
 
     const contact = await ContactUs.create({
       name,
       email,
-      subject,
+      phoneNumber,
       message,
     });
 
@@ -80,7 +80,7 @@ export const getContactUsById = async (req: Request, res: Response, next: NextFu
  */
 export const updateContactUs = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { name, email, subject, message, status } = req.body;
+    const { name, email, phoneNumber, message, status } = req.body;
 
     const contact = await ContactUs.findById(req.params.id);
 
@@ -90,7 +90,7 @@ export const updateContactUs = async (req: Request, res: Response, next: NextFun
 
     if (name) contact.name = name;
     if (email) contact.email = email;
-    if (subject) contact.subject = subject;
+    if (phoneNumber) contact.phoneNumber = phoneNumber;
     if (message) contact.message = message;
     if (status) contact.status = status;
 

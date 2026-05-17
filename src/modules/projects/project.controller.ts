@@ -3,36 +3,28 @@ import { Project } from './project.model';
 import { AppError } from '../../middleware/error.middleware';
 
 /**
- * @desc    Create a new project
+ * @desc    Create a new project submission
  * @route   POST /api/projects
  * @access  Public
  */
 export const createProject = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { title, description, client, completionDate, technologies, imageUrl } = req.body;
+    const { email, name, requiredService, message } = req.body;
 
-    if (!title || !description) {
-      return next(new AppError('Please provide both project title and description', 400));
-    }
-
-    const projectExists = await Project.findOne({ title });
-
-    if (projectExists) {
-      return next(new AppError('Project with this title already exists', 400));
+    if (!email || !name || !requiredService || !message) {
+      return next(new AppError('Please provide email, name, requiredService, and message', 400));
     }
 
     const project = await Project.create({
-      title,
-      description,
-      client,
-      completionDate,
-      technologies: technologies || [],
-      imageUrl,
+      email,
+      name,
+      requiredService,
+      message,
     });
 
     res.status(201).json({
       success: true,
-      message: 'Project created successfully',
+      message: 'Project inquiry submitted successfully',
       data: project,
     });
   } catch (error) {
@@ -88,7 +80,7 @@ export const getProjectById = async (req: Request, res: Response, next: NextFunc
  */
 export const updateProject = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { title, description, client, completionDate, technologies, imageUrl } = req.body;
+    const { email, name, requiredService, message } = req.body;
 
     const project = await Project.findById(req.params.id);
 
@@ -96,18 +88,10 @@ export const updateProject = async (req: Request, res: Response, next: NextFunct
       return next(new AppError('Project not found', 404));
     }
 
-    if (title) {
-      const projectExists = await Project.findOne({ title, _id: { $ne: req.params.id } });
-      if (projectExists) {
-        return next(new AppError('Project with this title already exists', 400));
-      }
-      project.title = title;
-    }
-    if (description) project.description = description;
-    if (client !== undefined) project.client = client;
-    if (completionDate !== undefined) project.completionDate = completionDate;
-    if (technologies !== undefined) project.technologies = technologies;
-    if (imageUrl !== undefined) project.imageUrl = imageUrl;
+    if (email) project.email = email;
+    if (name) project.name = name;
+    if (requiredService) project.requiredService = requiredService;
+    if (message) project.message = message;
 
     await project.save();
 

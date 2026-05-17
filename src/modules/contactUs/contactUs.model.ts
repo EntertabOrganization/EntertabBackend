@@ -3,7 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 export interface IContactUs extends Document {
   name: string;
   email: string;
-  subject: string;
+  phoneNumber: string;
   message: string;
   status: 'pending' | 'reviewed' | 'resolved';
   createdAt: Date;
@@ -27,9 +27,9 @@ const contactUsSchema = new Schema<IContactUs>(
         'Please provide a valid email address',
       ],
     },
-    subject: {
+    phoneNumber: {
       type: String,
-      required: [true, 'Please provide a subject'],
+      required: [true, 'Please provide your phone number'],
       trim: true,
     },
     message: {

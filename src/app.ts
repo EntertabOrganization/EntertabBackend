@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import path from 'path';
 import { errorHandler } from './middleware/error.middleware';
 import { setupSwagger } from './config/swagger';
 
@@ -24,6 +25,9 @@ app.use(morgan('dev'));
 // Body Parser Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve Static Uploaded Files (CVs, images, etc.)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Setup Swagger API Documentation
 setupSwagger(app);

@@ -1,34 +1,56 @@
 import { Schema, model, Document } from 'mongoose';
 
 export interface IService extends Document {
-  title: string;
-  description: string;
-  icon?: string;
-  price?: number;
+  email: string;
+  name: string;
+  phoneNumber: string;
+  message: string;
+  serviceType: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const serviceSchema = new Schema<IService>(
   {
-    title: {
+    email: {
       type: String,
-      required: [true, 'Please provide a service title'],
+      required: [true, 'Please provide your email'],
+      lowercase: true,
       trim: true,
-      unique: true,
+      match: [
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+        'Please provide a valid email address',
+      ],
     },
-    description: {
+    name: {
       type: String,
-      required: [true, 'Please provide a service description'],
+      required: [true, 'Please provide your name'],
       trim: true,
     },
-    icon: {
+    phoneNumber: {
       type: String,
+      required: [true, 'Please provide your phone number'],
       trim: true,
     },
-    price: {
-      type: Number,
-      min: [0, 'Price cannot be negative'],
+    message: {
+      type: String,
+      required: [true, 'Please provide a message'],
+      trim: true,
+    },
+    serviceType: {
+      type: String,
+      required: [true, 'Please select a service type'],
+      enum: [
+        'AI Edge – AI-Powered Automation & Intelligence',
+        'Digital Transformation Hub',
+        'Mobile App Development',
+        'Website Development',
+        'Brand Building',
+        'UI/UX Design',
+        'Digital Marketing',
+        'Marketing Content Writing',
+        'Social Media Management',
+      ],
     },
   },
   {

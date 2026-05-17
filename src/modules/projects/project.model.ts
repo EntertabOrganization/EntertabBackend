@@ -1,42 +1,50 @@
 import { Schema, model, Document } from 'mongoose';
 
 export interface IProject extends Document {
-  title: string;
-  description: string;
-  client?: string;
-  completionDate?: Date;
-  technologies: string[];
-  imageUrl?: string;
+  email: string;
+  name: string;
+  requiredService: string;
+  message: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const projectSchema = new Schema<IProject>(
   {
-    title: {
+    email: {
       type: String,
-      required: [true, 'Please provide a project title'],
+      required: [true, 'Please provide your email'],
+      lowercase: true,
       trim: true,
-      unique: true,
+      match: [
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+        'Please provide a valid email address',
+      ],
     },
-    description: {
+    name: {
       type: String,
-      required: [true, 'Please provide a project description'],
+      required: [true, 'Please provide your name'],
       trim: true,
     },
-    client: {
+    requiredService: {
       type: String,
-      trim: true,
+      required: [true, 'Please select a required service'],
+      enum: [
+        'AI Edge – AI-Powered Automation & Intelligence',
+        'Digital Transformation Hub',
+        'Website Development',
+        'Mobile App Development',
+        'Brand Building',
+        'Contact Center Solutions',
+        'UI/UX Design',
+        'Digital Marketing',
+        'Marketing Content Writing',
+        'Social Media Management',
+      ],
     },
-    completionDate: {
-      type: Date,
-    },
-    technologies: {
-      type: [String],
-      default: [],
-    },
-    imageUrl: {
+    message: {
       type: String,
+      required: [true, 'Please provide a message'],
       trim: true,
     },
   },

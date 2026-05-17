@@ -46,13 +46,13 @@ const options: swaggerJSDoc.Options = {
         },
         ContactUs: {
           type: 'object',
-          required: ['name', 'email', 'subject', 'message'],
+          required: ['name', 'email', 'phoneNumber', 'message'],
           properties: {
             _id: { type: 'string', example: '66472ab643a6d91244ab98fe' },
             name: { type: 'string', example: 'John Smith' },
             email: { type: 'string', format: 'email', example: 'john@example.com' },
-            subject: { type: 'string', example: 'Partnership Inquiry' },
-            message: { type: 'string', example: 'Hello, I would like to learn more about your services.' },
+            phoneNumber: { type: 'string', example: '+201012345678' },
+            message: { type: 'string', example: 'Hello, I would like to get in touch with your team.' },
             status: { type: 'string', enum: ['pending', 'reviewed', 'resolved'], example: 'pending' },
             createdAt: { type: 'string', format: 'date-time', example: '2026-05-17T15:49:56.000Z' },
             updatedAt: { type: 'string', format: 'date-time', example: '2026-05-17T15:49:56.000Z' },
@@ -60,41 +60,72 @@ const options: swaggerJSDoc.Options = {
         },
         Service: {
           type: 'object',
-          required: ['title', 'description'],
+          required: ['email', 'name', 'phoneNumber', 'message', 'serviceType'],
           properties: {
             _id: { type: 'string', example: '66472ab643a6d91244ab98ff' },
-            title: { type: 'string', example: 'Web Development' },
-            description: { type: 'string', example: 'Custom web application design and development services.' },
-            icon: { type: 'string', example: 'code' },
-            price: { type: 'number', example: 1500 },
+            email: { type: 'string', format: 'email', example: 'client@example.com' },
+            name: { type: 'string', example: 'Sarah Johnson' },
+            phoneNumber: { type: 'string', example: '+201123456789' },
+            message: { type: 'string', example: 'I need a mobile app to manage my sales pipeline.' },
+            serviceType: {
+              type: 'string',
+              enum: [
+                'AI Edge – AI-Powered Automation & Intelligence',
+                'Digital Transformation Hub',
+                'Mobile App Development',
+                'Website Development',
+                'Brand Building',
+                'UI/UX Design',
+                'Digital Marketing',
+                'Marketing Content Writing',
+                'Social Media Management',
+              ],
+              example: 'Mobile App Development',
+            },
             createdAt: { type: 'string', format: 'date-time', example: '2026-05-17T15:49:56.000Z' },
             updatedAt: { type: 'string', format: 'date-time', example: '2026-05-17T15:49:56.000Z' },
           },
         },
         Project: {
           type: 'object',
-          required: ['title', 'description'],
+          required: ['email', 'name', 'requiredService', 'message'],
           properties: {
             _id: { type: 'string', example: '66472ab643a6d91244ab9900' },
-            title: { type: 'string', example: 'Entertab Web Platform' },
-            description: { type: 'string', example: 'Enterprise web solution built with React and Express.' },
-            client: { type: 'string', example: 'Entertab Corp' },
-            completionDate: { type: 'string', format: 'date-time', example: '2026-06-01T00:00:00.000Z' },
-            technologies: { type: 'array', items: { type: 'string' }, example: ['React', 'Node.js', 'MongoDB'] },
-            imageUrl: { type: 'string', example: 'https://example.com/project.png' },
+            email: { type: 'string', format: 'email', example: 'business@example.com' },
+            name: { type: 'string', example: 'Robert Downey' },
+            requiredService: {
+              type: 'string',
+              enum: [
+                'AI Edge – AI-Powered Automation & Intelligence',
+                'Digital Transformation Hub',
+                'Website Development',
+                'Mobile App Development',
+                'Brand Building',
+                'Contact Center Solutions',
+                'UI/UX Design',
+                'Digital Marketing',
+                'Marketing Content Writing',
+                'Social Media Management',
+              ],
+              example: 'AI Edge – AI-Powered Automation & Intelligence',
+            },
+            message: { type: 'string', example: 'I would like to automate our internal customer service with AI.' },
             createdAt: { type: 'string', format: 'date-time', example: '2026-05-17T15:49:56.000Z' },
             updatedAt: { type: 'string', format: 'date-time', example: '2026-05-17T15:49:56.000Z' },
           },
         },
         Journey: {
           type: 'object',
-          required: ['title', 'description', 'year'],
+          required: ['email', 'name', 'positionOrSpecialisation', 'yearsOfExperience', 'typeOfEmployment', 'cvUpload', 'message'],
           properties: {
             _id: { type: 'string', example: '66472ab643a6d91244ab9901' },
-            title: { type: 'string', example: 'Company Founded' },
-            description: { type: 'string', example: 'Entertab was launched to revolutionize software solutions.' },
-            year: { type: 'string', example: '2020' },
-            milestoneType: { type: 'string', example: 'milestone' },
+            email: { type: 'string', format: 'email', example: 'applicant@example.com' },
+            name: { type: 'string', example: 'Alex Mercer' },
+            positionOrSpecialisation: { type: 'string', example: 'Senior Full Stack Developer' },
+            yearsOfExperience: { type: 'number', example: 5 },
+            typeOfEmployment: { type: 'string', example: 'Full-time' },
+            cvUpload: { type: 'string', example: '/uploads/cvUpload-1715957385920-948293819.pdf' },
+            message: { type: 'string', example: 'I am highly interested in joining Entertab as a developer.' },
             createdAt: { type: 'string', format: 'date-time', example: '2026-05-17T15:49:56.000Z' },
             updatedAt: { type: 'string', format: 'date-time', example: '2026-05-17T15:49:56.000Z' },
           },
@@ -332,12 +363,12 @@ const options: swaggerJSDoc.Options = {
               'application/json': {
                 schema: {
                   type: 'object',
-                  required: ['name', 'email', 'subject', 'message'],
+                  required: ['name', 'email', 'phoneNumber', 'message'],
                   properties: {
                     name: { type: 'string', example: 'John Smith' },
                     email: { type: 'string', format: 'email', example: 'john@example.com' },
-                    subject: { type: 'string', example: 'Partnership Inquiry' },
-                    message: { type: 'string', example: 'I would like to build a web application with you.' },
+                    phoneNumber: { type: 'string', example: '+201012345678' },
+                    message: { type: 'string', example: 'Hello, I would like to get in touch with your team.' },
                   },
                 },
               },
@@ -462,11 +493,11 @@ const options: swaggerJSDoc.Options = {
         get: {
           security: [{ bearerAuth: [] }],
           tags: ['Services'],
-          summary: 'Get All Services',
-          description: 'Retrieve all professional services offered. Requires admin JWT.',
+          summary: 'Get All Service Requests',
+          description: 'Retrieve all professional service submissions. Requires admin JWT.',
           responses: {
             200: {
-              description: 'List of services',
+              description: 'List of service requests',
               content: {
                 'application/json': {
                   schema: {
@@ -485,20 +516,35 @@ const options: swaggerJSDoc.Options = {
         },
         post: {
           tags: ['Services'],
-          summary: 'Create Service Request',
-          description: 'Request or submit a service inquiry. (Allows public submission).',
+          summary: 'Submit Service Request',
+          description: 'Submit an inquiry or request for one of the agency services.',
           requestBody: {
             required: true,
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  required: ['title', 'description'],
+                  required: ['email', 'name', 'phoneNumber', 'message', 'serviceType'],
                   properties: {
-                    title: { type: 'string', example: 'UI/UX Design' },
-                    description: { type: 'string', example: 'Premium wireframing and prototyping services.' },
-                    icon: { type: 'string', example: 'palette' },
-                    price: { type: 'number', example: 800 },
+                    email: { type: 'string', format: 'email', example: 'client@example.com' },
+                    name: { type: 'string', example: 'Sarah Johnson' },
+                    phoneNumber: { type: 'string', example: '+201123456789' },
+                    message: { type: 'string', example: 'I need a premium UI/UX design for a real estate portal.' },
+                    serviceType: {
+                      type: 'string',
+                      enum: [
+                        'AI Edge – AI-Powered Automation & Intelligence',
+                        'Digital Transformation Hub',
+                        'Mobile App Development',
+                        'Website Development',
+                        'Brand Building',
+                        'UI/UX Design',
+                        'Digital Marketing',
+                        'Marketing Content Writing',
+                        'Social Media Management',
+                      ],
+                      example: 'UI/UX Design',
+                    },
                   },
                 },
               },
@@ -506,7 +552,7 @@ const options: swaggerJSDoc.Options = {
           },
           responses: {
             201: {
-              description: 'Service request created successfully',
+              description: 'Service request submitted successfully',
               content: {
                 'application/json': {
                   schema: {
@@ -519,7 +565,7 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            400: { description: 'Invalid input data or duplicate title' },
+            400: { description: 'Invalid input data' },
           },
         },
       },
@@ -527,14 +573,14 @@ const options: swaggerJSDoc.Options = {
         get: {
           security: [{ bearerAuth: [] }],
           tags: ['Services'],
-          summary: 'Get Service By ID',
-          description: 'Retrieve details of a single service. Requires admin JWT.',
+          summary: 'Get Service Request By ID',
+          description: 'Retrieve details of a single service request. Requires admin JWT.',
           parameters: [
             { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Service Database ID' },
           ],
           responses: {
             200: {
-              description: 'Service details',
+              description: 'Service request details',
               content: {
                 'application/json': {
                   schema: {
@@ -547,15 +593,15 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            404: { description: 'Service not found' },
+            404: { description: 'Service request not found' },
             401: { description: 'Unauthorized' },
           },
         },
         put: {
           security: [{ bearerAuth: [] }],
           tags: ['Services'],
-          summary: 'Update Service By ID',
-          description: 'Modify information of an existing service. Requires admin JWT.',
+          summary: 'Update Service Request By ID',
+          description: 'Modify information of an existing service request. Requires admin JWT.',
           parameters: [
             { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Service Database ID' },
           ],
@@ -566,8 +612,8 @@ const options: swaggerJSDoc.Options = {
                 schema: {
                   type: 'object',
                   properties: {
-                    title: { type: 'string', example: 'UI/UX Design Master' },
-                    price: { type: 'number', example: 950 },
+                    name: { type: 'string', example: 'Sarah Johnson Updated' },
+                    message: { type: 'string', example: 'Updated details for the real estate project.' },
                   },
                 },
               },
@@ -575,7 +621,7 @@ const options: swaggerJSDoc.Options = {
           },
           responses: {
             200: {
-              description: 'Service updated successfully',
+              description: 'Service request updated successfully',
               content: {
                 'application/json': {
                   schema: {
@@ -588,21 +634,21 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            404: { description: 'Service not found' },
+            404: { description: 'Service request not found' },
             401: { description: 'Unauthorized' },
           },
         },
         delete: {
           security: [{ bearerAuth: [] }],
           tags: ['Services'],
-          summary: 'Delete Service By ID',
-          description: 'Permanently remove a service from the listings. Requires admin JWT.',
+          summary: 'Delete Service Request By ID',
+          description: 'Permanently remove a service request. Requires admin JWT.',
           parameters: [
             { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Service Database ID' },
           ],
           responses: {
             200: {
-              description: 'Service deleted successfully',
+              description: 'Service request deleted successfully',
               content: {
                 'application/json': {
                   schema: {
@@ -615,7 +661,7 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            404: { description: 'Service not found' },
+            404: { description: 'Service request not found' },
             401: { description: 'Unauthorized' },
           },
         },
@@ -624,11 +670,11 @@ const options: swaggerJSDoc.Options = {
         get: {
           security: [{ bearerAuth: [] }],
           tags: ['Projects'],
-          summary: 'Get All Projects',
-          description: 'Retrieve all portfolio projects. Requires admin JWT.',
+          summary: 'Get All Project Inquiries',
+          description: 'Retrieve all project inquiry submissions. Requires admin JWT.',
           responses: {
             200: {
-              description: 'List of projects',
+              description: 'List of project inquiries',
               content: {
                 'application/json': {
                   schema: {
@@ -647,21 +693,35 @@ const options: swaggerJSDoc.Options = {
         },
         post: {
           tags: ['Projects'],
-          summary: 'Create Project Inquiry',
-          description: 'Add a new project record or inquiry. (Allows public submission).',
+          summary: 'Submit Project Inquiry',
+          description: 'Submit a new project automation or development inquiry.',
           requestBody: {
             required: true,
             content: {
               'application/json': {
                 schema: {
                   type: 'object',
-                  required: ['title', 'description'],
+                  required: ['email', 'name', 'requiredService', 'message'],
                   properties: {
-                    title: { type: 'string', example: 'E-Commerce Platform' },
-                    description: { type: 'string', example: 'A scalable marketplace platform.' },
-                    client: { type: 'string', example: 'Mega Retail' },
-                    technologies: { type: 'array', items: { type: 'string' }, example: ['Node.js', 'React', 'MongoDB'] },
-                    imageUrl: { type: 'string', example: 'https://example.com/project1.png' },
+                    email: { type: 'string', format: 'email', example: 'business@example.com' },
+                    name: { type: 'string', example: 'Robert Downey' },
+                    requiredService: {
+                      type: 'string',
+                      enum: [
+                        'AI Edge – AI-Powered Automation & Intelligence',
+                        'Digital Transformation Hub',
+                        'Website Development',
+                        'Mobile App Development',
+                        'Brand Building',
+                        'Contact Center Solutions',
+                        'UI/UX Design',
+                        'Digital Marketing',
+                        'Marketing Content Writing',
+                        'Social Media Management',
+                      ],
+                      example: 'AI Edge – AI-Powered Automation & Intelligence',
+                    },
+                    message: { type: 'string', example: 'We need AI content writing and AI marketing solutions.' },
                   },
                 },
               },
@@ -669,7 +729,7 @@ const options: swaggerJSDoc.Options = {
           },
           responses: {
             201: {
-              description: 'Project created successfully',
+              description: 'Project inquiry submitted successfully',
               content: {
                 'application/json': {
                   schema: {
@@ -682,7 +742,7 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            400: { description: 'Invalid input data or duplicate title' },
+            400: { description: 'Invalid input data' },
           },
         },
       },
@@ -690,14 +750,14 @@ const options: swaggerJSDoc.Options = {
         get: {
           security: [{ bearerAuth: [] }],
           tags: ['Projects'],
-          summary: 'Get Project By ID',
-          description: 'Retrieve full details of a specific project. Requires admin JWT.',
+          summary: 'Get Project Inquiry By ID',
+          description: 'Retrieve full details of a specific project inquiry. Requires admin JWT.',
           parameters: [
             { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Project Database ID' },
           ],
           responses: {
             200: {
-              description: 'Project details',
+              description: 'Project inquiry details',
               content: {
                 'application/json': {
                   schema: {
@@ -710,15 +770,15 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            404: { description: 'Project not found' },
+            404: { description: 'Project inquiry not found' },
             401: { description: 'Unauthorized' },
           },
         },
         put: {
           security: [{ bearerAuth: [] }],
           tags: ['Projects'],
-          summary: 'Update Project By ID',
-          description: 'Modify information of an existing project. Requires admin JWT.',
+          summary: 'Update Project Inquiry By ID',
+          description: 'Modify information of an existing project inquiry. Requires admin JWT.',
           parameters: [
             { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Project Database ID' },
           ],
@@ -729,7 +789,8 @@ const options: swaggerJSDoc.Options = {
                 schema: {
                   type: 'object',
                   properties: {
-                    client: { type: 'string', example: 'Mega Retail International' },
+                    name: { type: 'string', example: 'Robert Downey Jr.' },
+                    requiredService: { type: 'string', example: 'Website Development' },
                   },
                 },
               },
@@ -737,7 +798,7 @@ const options: swaggerJSDoc.Options = {
           },
           responses: {
             200: {
-              description: 'Project updated successfully',
+              description: 'Project inquiry updated successfully',
               content: {
                 'application/json': {
                   schema: {
@@ -750,21 +811,21 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            404: { description: 'Project not found' },
+            404: { description: 'Project inquiry not found' },
             401: { description: 'Unauthorized' },
           },
         },
         delete: {
           security: [{ bearerAuth: [] }],
           tags: ['Projects'],
-          summary: 'Delete Project By ID',
-          description: 'Permanently remove a project from the portfolio. Requires admin JWT.',
+          summary: 'Delete Project Inquiry By ID',
+          description: 'Permanently remove a project inquiry. Requires admin JWT.',
           parameters: [
             { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Project Database ID' },
           ],
           responses: {
             200: {
-              description: 'Project deleted successfully',
+              description: 'Project inquiry deleted successfully',
               content: {
                 'application/json': {
                   schema: {
@@ -777,7 +838,7 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            404: { description: 'Project not found' },
+            404: { description: 'Project inquiry not found' },
             401: { description: 'Unauthorized' },
           },
         },
@@ -785,12 +846,12 @@ const options: swaggerJSDoc.Options = {
       '/api/journeys': {
         get: {
           security: [{ bearerAuth: [] }],
-          tags: ['Journeys'],
-          summary: 'Get All Journeys',
-          description: 'Retrieve all historical journey/milestone records. Requires admin JWT.',
+          tags: ['Journeys / Careers'],
+          summary: 'Get All Career Applications',
+          description: 'Retrieve all career/job applications. Requires admin JWT.',
           responses: {
             200: {
-              description: 'List of journeys',
+              description: 'List of career applications',
               content: {
                 'application/json': {
                   schema: {
@@ -808,21 +869,24 @@ const options: swaggerJSDoc.Options = {
           },
         },
         post: {
-          tags: ['Journeys'],
-          summary: 'Create Journey Milestone',
-          description: 'Add a new journey/milestone record. (Allows public submission).',
+          tags: ['Journeys / Careers'],
+          summary: 'Submit Career Application (with CV upload)',
+          description: 'Apply for a role at Entertab. Expects a `multipart/form-data` request with CV file upload.',
           requestBody: {
             required: true,
             content: {
-              'application/json': {
+              'multipart/form-data': {
                 schema: {
                   type: 'object',
-                  required: ['title', 'description', 'year'],
+                  required: ['email', 'name', 'positionOrSpecialisation', 'yearsOfExperience', 'typeOfEmployment', 'cvUpload', 'message'],
                   properties: {
-                    title: { type: 'string', example: 'Reached 100 Clients' },
-                    description: { type: 'string', example: 'Celebrated serving over 100 enterprise customers.' },
-                    year: { type: 'string', example: '2024' },
-                    milestoneType: { type: 'string', example: 'achievement' },
+                    name: { type: 'string', example: 'Alex Mercer' },
+                    email: { type: 'string', format: 'email', example: 'applicant@example.com' },
+                    positionOrSpecialisation: { type: 'string', example: 'Senior Full Stack Developer' },
+                    yearsOfExperience: { type: 'integer', example: 5 },
+                    typeOfEmployment: { type: 'string', example: 'Full-time' },
+                    cvUpload: { type: 'string', format: 'binary', description: 'Upload CV file (.pdf, .doc, .docx)' },
+                    message: { type: 'string', example: 'I am highly interested in joining Entertab.' },
                   },
                 },
               },
@@ -830,7 +894,7 @@ const options: swaggerJSDoc.Options = {
           },
           responses: {
             201: {
-              description: 'Journey created successfully',
+              description: 'Career application submitted successfully',
               content: {
                 'application/json': {
                   schema: {
@@ -843,22 +907,22 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            400: { description: 'Invalid input data' },
+            400: { description: 'Invalid input data or missing CV file' },
           },
         },
       },
       '/api/journeys/{id}': {
         get: {
           security: [{ bearerAuth: [] }],
-          tags: ['Journeys'],
-          summary: 'Get Journey By ID',
-          description: 'Retrieve detailed information on a specific journey item. Requires admin JWT.',
+          tags: ['Journeys / Careers'],
+          summary: 'Get Career Application By ID',
+          description: 'Retrieve detailed information on a specific career application. Requires admin JWT.',
           parameters: [
-            { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Journey Database ID' },
+            { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Application Database ID' },
           ],
           responses: {
             200: {
-              description: 'Journey details',
+              description: 'Career application details',
               content: {
                 'application/json': {
                   schema: {
@@ -871,26 +935,32 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            404: { description: 'Journey not found' },
+            404: { description: 'Application not found' },
             401: { description: 'Unauthorized' },
           },
         },
         put: {
           security: [{ bearerAuth: [] }],
-          tags: ['Journeys'],
-          summary: 'Update Journey By ID',
-          description: 'Modify information of an existing journey item. Requires admin JWT.',
+          tags: ['Journeys / Careers'],
+          summary: 'Update Career Application By ID',
+          description: 'Modify details of an existing career application. Optionally accepts a new CV file.',
           parameters: [
-            { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Journey Database ID' },
+            { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Application Database ID' },
           ],
           requestBody: {
             required: true,
             content: {
-              'application/json': {
+              'multipart/form-data': {
                 schema: {
                   type: 'object',
                   properties: {
-                    description: { type: 'string', example: 'Serviced 100+ global brands and startup portfolios.' },
+                    name: { type: 'string', example: 'Alex Mercer Updated' },
+                    email: { type: 'string', format: 'email', example: 'applicant.updated@example.com' },
+                    positionOrSpecialisation: { type: 'string', example: 'Lead Developer' },
+                    yearsOfExperience: { type: 'integer', example: 6 },
+                    typeOfEmployment: { type: 'string', example: 'Remote' },
+                    cvUpload: { type: 'string', format: 'binary', description: 'Optionally upload new CV file' },
+                    message: { type: 'string', example: 'Updated details for my application.' },
                   },
                 },
               },
@@ -898,7 +968,7 @@ const options: swaggerJSDoc.Options = {
           },
           responses: {
             200: {
-              description: 'Journey updated successfully',
+              description: 'Application updated successfully',
               content: {
                 'application/json': {
                   schema: {
@@ -911,21 +981,21 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            404: { description: 'Journey not found' },
+            404: { description: 'Application not found' },
             401: { description: 'Unauthorized' },
           },
         },
         delete: {
           security: [{ bearerAuth: [] }],
-          tags: ['Journeys'],
-          summary: 'Delete Journey By ID',
-          description: 'Permanently remove a journey milestone. Requires admin JWT.',
+          tags: ['Journeys / Careers'],
+          summary: 'Delete Career Application By ID',
+          description: 'Permanently remove a career application. Requires admin JWT.',
           parameters: [
-            { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Journey Database ID' },
+            { name: 'id', in: 'path', required: true, schema: { type: 'string' }, description: 'Application Database ID' },
           ],
           responses: {
             200: {
-              description: 'Journey deleted successfully',
+              description: 'Application deleted successfully',
               content: {
                 'application/json': {
                   schema: {
@@ -938,7 +1008,7 @@ const options: swaggerJSDoc.Options = {
                 },
               },
             },
-            404: { description: 'Journey not found' },
+            404: { description: 'Application not found' },
             401: { description: 'Unauthorized' },
           },
         },

@@ -3,34 +3,29 @@ import { Service } from './service.model';
 import { AppError } from '../../middleware/error.middleware';
 
 /**
- * @desc    Create a new service
+ * @desc    Create a new service submission
  * @route   POST /api/services
  * @access  Public
  */
 export const createService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { title, description, icon, price } = req.body;
+    const { email, name, phoneNumber, message, serviceType } = req.body;
 
-    if (!title || !description) {
-      return next(new AppError('Please provide both service title and description', 400));
-    }
-
-    const serviceExists = await Service.findOne({ title });
-
-    if (serviceExists) {
-      return next(new AppError('Service with this title already exists', 400));
+    if (!email || !name || !phoneNumber || !message || !serviceType) {
+      return next(new AppError('Please provide email, name, phoneNumber, message, and serviceType', 400));
     }
 
     const service = await Service.create({
-      title,
-      description,
-      icon,
-      price,
+      email,
+      name,
+      phoneNumber,
+      message,
+      serviceType,
     });
 
     res.status(201).json({
       success: true,
-      message: 'Service created successfully',
+      message: 'Service request submitted successfully',
       data: service,
     });
   } catch (error) {
@@ -67,7 +62,7 @@ export const getServiceById = async (req: Request, res: Response, next: NextFunc
     const service = await Service.findById(req.params.id);
 
     if (!service) {
-      return next(new AppError('Service not found', 404));
+      return next(new AppError('Service request not found', 404));
     }
 
     res.status(200).json({
@@ -86,30 +81,25 @@ export const getServiceById = async (req: Request, res: Response, next: NextFunc
  */
 export const updateService = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { title, description, icon, price } = req.body;
+    const { email, name, phoneNumber, message, serviceType } = req.body;
 
     const service = await Service.findById(req.params.id);
 
     if (!service) {
-      return next(new AppError('Service not found', 404));
+      return next(new AppError('Service request not found', 404));
     }
 
-    if (title) {
-      const serviceExists = await Service.findOne({ title, _id: { $ne: req.params.id } });
-      if (serviceExists) {
-        return next(new AppError('Service with this title already exists', 400));
-      }
-      service.title = title;
-    }
-    if (description) service.description = description;
-    if (icon !== undefined) service.icon = icon;
-    if (price !== undefined) service.price = price;
+    if (email) service.email = email;
+    if (name) service.name = name;
+    if (phoneNumber) service.phoneNumber = phoneNumber;
+    if (message) service.message = message;
+    if (serviceType) service.serviceType = serviceType;
 
     await service.save();
 
     res.status(200).json({
       success: true,
-      message: 'Service updated successfully',
+      message: 'Service request updated successfully',
       data: service,
     });
   } catch (error) {
@@ -127,14 +117,14 @@ export const deleteService = async (req: Request, res: Response, next: NextFunct
     const service = await Service.findById(req.params.id);
 
     if (!service) {
-      return next(new AppError('Service not found', 404));
+      return next(new AppError('Service request not found', 404));
     }
 
     await Service.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
       success: true,
-      message: 'Service removed successfully',
+      message: 'Service request removed successfully',
     });
   } catch (error) {
     next(error);

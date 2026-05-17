@@ -3,28 +3,37 @@ import { Journey } from './journey.model';
 import { AppError } from '../../middleware/error.middleware';
 
 /**
- * @desc    Create a new journey milestone
+ * @desc    Create a new journey milestone (career application)
  * @route   POST /api/journeys
  * @access  Public
  */
 export const createJourney = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { title, description, year, milestoneType } = req.body;
+    const { email, name, positionOrSpecialisation, yearsOfExperience, typeOfEmployment, message } = req.body;
 
-    if (!title || !description || !year) {
-      return next(new AppError('Please provide title, description and year', 400));
+    if (!req.file) {
+      return next(new AppError('Please upload your CV', 400));
     }
 
+    if (!email || !name || !positionOrSpecialisation || !yearsOfExperience || !typeOfEmployment || !message) {
+      return next(new AppError('Please provide all required fields', 400));
+    }
+
+    const cvUpload = `/uploads/${req.file.filename}`;
+
     const journey = await Journey.create({
-      title,
-      description,
-      year,
-      milestoneType,
+      email,
+      name,
+      positionOrSpecialisation,
+      yearsOfExperience: Number(yearsOfExperience),
+      typeOfEmployment,
+      cvUpload,
+      message,
     });
 
     res.status(201).json({
       success: true,
-      message: 'Journey milestone created successfully',
+      message: 'Journey/Career application submitted successfully',
       data: journey,
     });
   } catch (error) {
@@ -39,7 +48,7 @@ export const createJourney = async (req: Request, res: Response, next: NextFunct
  */
 export const getJourneys = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const journeys = await Journey.find().sort({ year: -1, createdAt: -1 });
+    const journeys = await Journey.find().sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
@@ -61,7 +70,7 @@ export const getJourneyById = async (req: Request, res: Response, next: NextFunc
     const journey = await Journey.findById(req.params.id);
 
     if (!journey) {
-      return next(new AppError('Journey milestone not found', 404));
+      return next(new AppError('Journey/Career application not found', 404));
     }
 
     res.status(200).json({
@@ -80,24 +89,31 @@ export const getJourneyById = async (req: Request, res: Response, next: NextFunc
  */
 export const updateJourney = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { title, description, year, milestoneType } = req.body;
+    const { email, name, positionOrSpecialisation, yearsOfExperience, typeOfEmployment, message } = req.body;
 
     const journey = await Journey.findById(req.params.id);
 
     if (!journey) {
-      return next(new AppError('Journey milestone not found', 404));
+      return next(new AppError('Journey/Career application not found', 404));
     }
 
-    if (title) journey.title = title;
-    if (description) journey.description = description;
-    if (year) journey.year = year;
-    if (milestoneType !== undefined) journey.milestoneType = milestoneType;
+    if (email) journey.email = email;
+    if (name) journey.name = name;
+    if (positionOrSpecialisation) journey.positionOrSpecialisation = positionOrSpecialisation;
+    if (yearsOfExperience !== undefined) journey.yearsOfExperience = Number(yearsOfExperience);
+    if (typeOfEmployment) journey.typeOfEmployment = typeOfEmployment;
+    if (message) journey.message = message;
+
+    // Handle CV update if a new file is uploaded
+    if (req.file) {
+      journey.cvUpload = `/uploads/${req.file.filename}`;
+    }
 
     await journey.save();
 
     res.status(200).json({
       success: true,
-      message: 'Journey milestone updated successfully',
+      message: 'Journey/Career application updated successfully',
       data: journey,
     });
   } catch (error) {
@@ -115,14 +131,14 @@ export const deleteJourney = async (req: Request, res: Response, next: NextFunct
     const journey = await Journey.findById(req.params.id);
 
     if (!journey) {
-      return next(new AppError('Journey milestone not found', 404));
+      return next(new AppError('Journey/Career application not found', 404));
     }
 
     await Journey.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
       success: true,
-      message: 'Journey milestone removed successfully',
+      message: 'Journey/Career application removed successfully',
     });
   } catch (error) {
     next(error);
