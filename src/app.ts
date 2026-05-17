@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { errorHandler } from './middleware/error.middleware';
+import { setupSwagger } from './config/swagger';
 
 // Import routers
 import userRouter from './modules/users/user.routes';
@@ -23,6 +24,9 @@ app.use(morgan('dev'));
 // Body Parser Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Setup Swagger API Documentation
+setupSwagger(app);
 
 // Welcome / Health Route
 app.get('/api/health', (_req: Request, res: Response) => {

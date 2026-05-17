@@ -39,6 +39,7 @@ const startServer = async (): Promise<void> => {
   const PORT = config.port;
   const server = app.listen(PORT, () => {
     console.log(`Server running in ${config.nodeEnv} mode on port ${PORT}`);
+    console.log(`Swagger API Documentation is available at: http://localhost:${PORT}/api-docs`);
   });
 
   // Handle unhandled promise rejections gracefully
