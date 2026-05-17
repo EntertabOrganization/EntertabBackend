@@ -1,0 +1,56 @@
+# Dependency Directories
+node_modules/
+jspm_packages/
+web_modules/
+
+# Build Directories and Compiled Code
+dist/
+build/
+out/
+x64/
+x86/
+*.tsbuildinfo
+
+# Environment Variables & Secrets (CRITICAL: Never commit database passwords/keys)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Diagnostic and Log Files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+logs/
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Editor/IDE Configurations
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Testing & Scratch Files
+scripts/test-mongo.js
+coverage/
+.nyc_output/
