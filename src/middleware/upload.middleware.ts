@@ -3,35 +3,39 @@ import path from 'path';
 import fs from 'fs';
 import { Request } from 'express';
 
-// For Vercel/serverless: use /tmp; for local: use /uploads
+// Determine upload directory
 const uploadDir = process.env.VERCEL 
   ? '/tmp/uploads' 
   : path.join(__dirname, '../../uploads');
 
-// Only create directory locally (not on Vercel)
-if (!process.env.VERCEL && !fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+// Initialize storage - try disk first, fall back to memory on Vercel
+let storage: multer.StorageEngine;
 
-// Multer Storage Configuration
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    // On Vercel, try to create /tmp if it exists
-    if (process.env.VERCEL && !fs.existsSync(uploadDir)) {
-      try {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      } catch (err) {
-        // Silently fail - will use memory storage fallback
-      }
+if (process.env.VERCEL) {
+  // Use memory storage on Vercel (serverless has no persistent file system)
+  storage = multer.memoryStorage();
+  console.warn('[Upload] Running on Vercel - using memory storage. Files are temporary.');
+} else {
+  // Try to use disk storage locally
+  try {
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
     }
-    cb(null, uploadDir);
-  },
-  filename: (_req, file, cb) => {
-    // Standard filename format: fieldname-timestamp.extension
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
-  },
-});
+    storage = multer.diskStorage({
+      destination: (_req, _file, cb) => {
+        cb(null, uploadDir);
+      },
+      filename: (_req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
+      },
+    });
+  } catch (err) {
+    // Fallback to memory storage if disk fails
+    console.error('[Upload] Failed to initialize disk storage, using memory storage:', err);
+    storage = multer.memoryStorage();
+  }
+}
 
 // File Type Filter
 const fileFilter = (_req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
