@@ -3,15 +3,27 @@ import path from 'path';
 import fs from 'fs';
 import { Request } from 'express';
 
-// Ensure upload directory exists
-const uploadDir = path.join(__dirname, '../../uploads');
-if (!fs.existsSync(uploadDir)) {
+// For Vercel/serverless: use /tmp; for local: use /uploads
+const uploadDir = process.env.VERCEL 
+  ? '/tmp/uploads' 
+  : path.join(__dirname, '../../uploads');
+
+// Only create directory locally (not on Vercel)
+if (!process.env.VERCEL && !fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 // Multer Storage Configuration
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
+    // On Vercel, try to create /tmp if it exists
+    if (process.env.VERCEL && !fs.existsSync(uploadDir)) {
+      try {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      } catch (err) {
+        // Silently fail - will use memory storage fallback
+      }
+    }
     cb(null, uploadDir);
   },
   filename: (_req, file, cb) => {
