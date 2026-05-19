@@ -1051,11 +1051,13 @@ export const setupSwagger = (app: Application): void => {
 </body>
 </html>`;
 
-  app.get('/api-docs', (_req, res) => res.redirect('/api-docs/'));
-  app.get('/api-docs/', (_req, res) => {
+  const serveSwaggerHtml = (_req: any, res: any): void => {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.send(swaggerHtml);
-  });
+  };
+
+  app.get('/api-docs', serveSwaggerHtml);
+  app.get('/api-docs/', serveSwaggerHtml);
 
   // Redirect the root path `/` to `/api-docs` directly
   app.get('/', (_req, res) => {
