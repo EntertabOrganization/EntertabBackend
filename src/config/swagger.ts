@@ -1028,15 +1028,17 @@ export const setupSwagger = (app: Application): void => {
   });
 
   // Serve Swagger UI and load schema from /api-docs.json
+  const swaggerUiOptions = {
+    swaggerOptions: {
+      url: '/api-docs.json',
+    },
+    explorer: true,
+  };
+
   app.use(
     '/api-docs',
-    swaggerUi.serve,
-    swaggerUi.setup(undefined, {
-      swaggerOptions: {
-        url: '/api-docs.json',
-      },
-      explorer: true,
-    })
+    swaggerUi.serveFiles(undefined, swaggerUiOptions),
+    swaggerUi.setup(undefined, swaggerUiOptions)
   );
 
   // Redirect the root path `/` to `/api-docs` directly
