@@ -15,7 +15,12 @@ import journeyRouter from './modules/journey/journey.routes';
 const app: Application = express();
 
 // Security Middlewares
-app.use(helmet());
+// Swagger UI needs inline scripts/styles to render correctly in browser.
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 app.use(cors());
 
 // Logging Middleware
