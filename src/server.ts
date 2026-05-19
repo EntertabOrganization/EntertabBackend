@@ -1,43 +1,9 @@
 import app from './app';
-import { connectDB } from './config/db';
 import { config } from './config/env';
-import { User } from './modules/users/user.model';
-import { initializeGridFS } from './middleware/upload.middleware';
-
-// Seed default administrator if none exists
-const seedDefaultAdmin = async (): Promise<void> => {
-  try {
-    const adminCount = await User.countDocuments({ role: 'admin' });
-    if (adminCount === 0) {
-      console.log('No administrator found in database. Seeding default admin...');
-      await User.create({
-        name: 'System Admin',
-        email: config.defaultAdmin.email,
-        password: config.defaultAdmin.password,
-        role: 'admin',
-      });
-      console.log('--------------------------------------------------');
-      console.log('DEFAULT ADMINISTRATOR SEEDED SUCCESSFULLY!');
-      console.log(`Email: ${config.defaultAdmin.email}`);
-      console.log(`Password: ${config.defaultAdmin.password}`);
-      console.log('--------------------------------------------------');
-    } else {
-      console.log('Administrator accounts exist. Skipping bootstrap seeder.');
-    }
-  } catch (error) {
-    console.error(`Error bootstrapping default administrator: ${(error as Error).message}`);
-  }
-};
+import { ensureAppInitialized } from './bootstrap';
 
 const startServer = async (): Promise<void> => {
-  // Connect to Database
-  await connectDB();
-
-  // Initialize MongoDB GridFS for file uploads
-  initializeGridFS();
-
-  // Run initial seeder/bootstrap
-  await seedDefaultAdmin();
+  await ensureAppInitialized();
 
   // Start Express HTTP Server
   const PORT = config.port;
