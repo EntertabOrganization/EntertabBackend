@@ -1021,8 +1021,23 @@ const options: swaggerJSDoc.Options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 export const setupSwagger = (app: Application): void => {
-  // Serve Swagger UI
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  // Serve raw OpenAPI JSON explicitly to avoid large inline init script issues in some runtimes.
+  app.get('/api-docs.json', (_req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+  });
+
+  // Serve Swagger UI and load schema from /api-docs.json
+  app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    swaggerUi.setup(undefined, {
+      swaggerOptions: {
+        url: '/api-docs.json',
+      },
+      explorer: true,
+    })
+  );
 
   // Redirect the root path `/` to `/api-docs` directly
   app.get('/', (_req, res) => {
