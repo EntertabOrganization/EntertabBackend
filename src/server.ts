@@ -2,6 +2,7 @@ import app from './app';
 import { connectDB } from './config/db';
 import { config } from './config/env';
 import { User } from './modules/users/user.model';
+import { initializeGridFS } from './middleware/upload.middleware';
 
 // Seed default administrator if none exists
 const seedDefaultAdmin = async (): Promise<void> => {
@@ -31,6 +32,9 @@ const seedDefaultAdmin = async (): Promise<void> => {
 const startServer = async (): Promise<void> => {
   // Connect to Database
   await connectDB();
+
+  // Initialize MongoDB GridFS for file uploads
+  initializeGridFS();
 
   // Run initial seeder/bootstrap
   await seedDefaultAdmin();

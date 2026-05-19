@@ -5,6 +5,7 @@ import {
   getJourneyById,
   updateJourney,
   deleteJourney,
+  downloadCVFile,
 } from './journey.controller';
 import { protectAdmin } from '../../middleware/auth.middleware';
 import { upload } from '../../middleware/upload.middleware';
@@ -18,6 +19,9 @@ router.post('/', upload.single('cvUpload'), createJourney);
 router.use(protectAdmin);
 
 router.get('/', getJourneys);
+
+// Download CV file route
+router.get('/file/:fileId', downloadCVFile);
 
 router.route('/:id')
   .get(getJourneyById)
