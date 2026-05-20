@@ -1,8 +1,11 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Load environment variables from .env file
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+// Enable access to System Environment Variables if this are the env in production
+if (process.env.NODE_ENV !== 'production') {
+  // Load environment variables from .env file
+  dotenv.config({ path: path.join(__dirname, '../../.env') });
+}
 
 export const config = {
   port: parseInt(process.env.PORT || '5000', 10),
