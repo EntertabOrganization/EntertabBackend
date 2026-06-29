@@ -48,6 +48,7 @@ const serviceSchema = new Schema<IService>(
         'Brand Building',
         'UI/UX Design',
         'Digital Marketing',
+        'SEO',
         'Marketing Content Writing',
         'Social Media Management',
       ],
