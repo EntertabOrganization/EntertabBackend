@@ -147,7 +147,7 @@ const options: swaggerJSDoc.Options = {
                   type: 'object',
                   required: ['email', 'password'],
                   properties: {
-                    email: { type: 'string', format: 'email', example: 'admin@entertab.com' },
+                    email: { type: 'string', format: 'email', example: 'admin@entertab.net' },
                     password: { type: 'string', format: 'password', example: 'admin123' },
                   },
                 },

@@ -78,7 +78,7 @@ JWT_SECRET=entertab_super_secret_jwt_key_2026
 JWT_EXPIRES_IN=7d
 
 # Default Bootstrapped Admin (Seeded on first run if DB is empty)
-DEFAULT_ADMIN_EMAIL=admin@entertab.com
+DEFAULT_ADMIN_EMAIL=admin@entertab.net
 DEFAULT_ADMIN_PASSWORD=admin123
 ```
 

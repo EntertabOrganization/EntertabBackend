@@ -14,7 +14,7 @@ export const config = {
   jwtSecret: process.env.JWT_SECRET || 'entertab_super_secret_jwt_key_2026',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
   defaultAdmin: {
-    email: process.env.DEFAULT_ADMIN_EMAIL || 'admin@entertab.com',
+    email: process.env.DEFAULT_ADMIN_EMAIL || 'admin@entertab.net',
     password: process.env.DEFAULT_ADMIN_PASSWORD || 'admin123',
   },
 };
